@@ -2,16 +2,15 @@ const electron = require('electron')
 const path = require('path')
 
 const { app, BrowserWindow, ipcMain, Tray, Menu, screen, dialog } = electron
-// const { autoUpdater } = require('electron-updater')
-const iconPath = path.join(__dirname, './src/img/icon.png')
+const iconPath = path.join(__dirname, './src/img/icon.png') // 图标路径
 
 let mainWindow
 let tray
 let remindWindow
 
-app.on('ready', () => {
+app.on('ready', () => { // 应用启动后创建主窗口
 
-  mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({ // 创建主窗口
     frame: false,
     resizable: false,
     width: 800,
@@ -23,9 +22,11 @@ app.on('ready', () => {
       contextIsolation: false
     }
   })
-  mainWindow.loadURL(`file://${__dirname}/src/main.html`)
-  mainWindow.removeMenu()
-  tray = new Tray(iconPath)
+
+  mainWindow.loadURL(`file://${__dirname}/src/main.html`) // 加载主窗口页面
+  mainWindow.removeMenu() // 移除菜单栏
+
+  tray = new Tray(iconPath) // 创建托盘
   tray.setToolTip('Tasky')
   tray.on('click', () => {
     if(mainWindow.isVisible()){
@@ -34,10 +35,11 @@ app.on('ready', () => {
       mainWindow.show()
     }
   })
-  tray.on('right-click', () => {
+
+  tray.on('right-click', () => { // 右键点击托盘
     const menuConfig = Menu.buildFromTemplate([
       {
-        label: 'Quit',
+        label: '退出程序',
         click: () => app.quit()
       }
     ])
@@ -46,25 +48,26 @@ app.on('ready', () => {
 
 })
 
-ipcMain.on('mainWindow:close', () => {
-  mainWindow.hide()
+ipcMain.on('mainWindow:close', () => { // 监听主窗口关闭事件
+  // mainWindow.hide()
+  mainWindow.close() // 点击关闭按钮时关闭主窗口
 })
 
-ipcMain.on('remindWindow:close', () => {
+ipcMain.on('remindWindow:close', () => { // 监听提醒窗口关闭事件
   remindWindow.close()
 })
 
-ipcMain.on('setTaskTimer', (event, time, task) => {
+ipcMain.on('setTaskTimer', (event, time, task) => { // 计时器
   const now = new Date()
   const date = new Date()
   date.setHours(time.slice(0,2), time.slice(3),0)
   const timeout = date.getTime() - now.getTime()
   setTimeout(() => {
-    createRemindWindow(task)
+    createRemindWindow(task) // 创建提醒窗口，显示提醒
   }, timeout)
 })
 
-function createRemindWindow (task) {
+function createRemindWindow (task) { // 显示提醒
   if(remindWindow) remindWindow.close()
   remindWindow = new BrowserWindow({
     height: 450,
@@ -76,10 +79,10 @@ function createRemindWindow (task) {
     webPreferences:{
       nodeIntegration:true,
       contextIsolation: false,
-      // preload: path.join(__dirname, './preload.js')
     }
   })
-  remindWindow.removeMenu()
+
+  remindWindow.removeMenu() // 移除菜单栏
   const size = screen.getPrimaryDisplay().workAreaSize
   const { y } = tray.getBounds()
   const { height, width } = remindWindow.getBounds()
@@ -90,6 +93,7 @@ function createRemindWindow (task) {
     height,
     width 
   })
+
   remindWindow.setAlwaysOnTop(true)
   remindWindow.loadURL(`file://${__dirname}/src/remind.html`)
   remindWindow.show()
@@ -98,34 +102,6 @@ function createRemindWindow (task) {
   setTimeout( () => {
     remindWindow && remindWindow.close()
   }, 50 * 1000)
-}
-
-function checkUpdate(){
-  if(process.platform == 'darwin'){
-    autoUpdater.setFeedURL('http://127.0.0.1:9005/darwin')
-  }else{
-    autoUpdater.setFeedURL('http://127.0.0.1:9005/win32')
-  }
-  autoUpdater.checkForUpdates()
-  autoUpdater.on('error', (err) => {
-    console.log(err)
-  })
-  autoUpdater.on('update-available', () => {
-    console.log('found new version')
-  })
-  autoUpdater.on('update-downloaded', () => {
-    dialog.showMessageBox({
-      type: 'info',
-      title: '应用更新',
-      message: '发现新版本，是否更新？',
-      buttons: ['是', '否']
-    }).then((buttonIndex) => {
-      if(buttonIndex.response == 0) {
-        autoUpdater.quitAndInstall()
-        app.quit()
-      }
-    })
-  })
 }
 
 app.on('activate', () => {
