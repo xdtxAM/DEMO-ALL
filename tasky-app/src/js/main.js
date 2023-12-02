@@ -41,7 +41,7 @@
   genFinished() // 同时生成已完成任务列表
   // 如果不生成上面两个，数据就无法从 localStorage 中获取，也就无法显示在页面上
 
-  tabManage.forEach((el,index) => { // 给 tab-manage  3 个，每一个都添加点击动作
+  tabManage.forEach((el,index) => { // 给 tab-manage 3 个，每一个都添加点击动作
     el.addEventListener('click', () => {
       activeTab (index) // 点击的是第几个，就执行第几个
       // 例如，你点击页面上的 「待办事项」，就会执行 activeTab(0)，给第一个标签加上 nav-active 类名，绿色背景
