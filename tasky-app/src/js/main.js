@@ -5,13 +5,13 @@
 
   const tabManage = document.querySelectorAll('.tab-manage')
   const contentManage = document.querySelectorAll('.content-manage')
-  const taskTodo = document.querySelector('.task-todo')
+  const taskTodo = document.querySelector('.task-todo') // 选择类名是 task-todo 的元素
   const taskFinished = document.querySelector('.task-finished')
   const keepTimesDom = document.querySelector('.keep-times')
   const closeDom = document.querySelector('.close')
   const date = new Date(), nowTime = date.getTime()
 
-  //localStorage存储数据
+  // localStorage 获取数据
   let loginTime = localStorage.getItem('loginTime')
   let tasksTodo = localStorage.getItem('tasksTodo') 
   let tasksFinished = localStorage.getItem('tasksFinished')
@@ -19,9 +19,10 @@
 
   tasksTodo = tasksTodo ? JSON.parse(tasksTodo) : []
   tasksFinished = tasksFinished ? JSON.parse(tasksFinished) : []
-  keepTimes = keepTimes ? keepTimes : 0
+  keepTimes = keepTimes ? keepTimes : 0 // 完成次数
 
   // 判断上次登录时间，如果是今天，则任务，否则清空
+  // 这一块可能是为了处理，如果有昨天残留的任务，那么就需要提醒
   if(!loginTime){
     loginTime = nowTime
   }else{
@@ -34,14 +35,15 @@
     }
   }
 
-  //初始化
-  //填入日期
-  document.querySelector('.date').innerText = `${date.getFullYear()}/${date.getMonth()+1}/${date.getDate()}`
+  // 初始化
+  document.querySelector('.date').innerText = `${date.getFullYear()}/${date.getMonth()+1}/${date.getDate()}` // 日期插入到 html 中
   genTodo() // 从 localStorage 中获取数据，生成待办任务列表
   genFinished() // 同时生成已完成任务列表
   // 如果不生成上面两个，数据就无法从 localStorage 中获取，也就无法显示在页面上
 
   tabManage.forEach((el,index) => { // 给 tab-manage1 3 个，每一个都添加点击动作
+    // html 里面的元素，需要指定惦记的动作是什么？
+    // 这里点击的动作就是 activeTab 函数和 activeContent 函数
     el.addEventListener('click', () => {
       activeTab (index) // 点击的是第几个，就执行第几个
       // 例如，你点击页面上的 「待办事项」，就会执行 activeTab(0)，给第一个标签加上 nav-active 类名，绿色背景
@@ -50,31 +52,33 @@
     })
   })
 
-  taskTodo.addEventListener('click', (event) => {
-    const target = event.target
-    const index = target.getAttribute("data-index")
-    if(target.classList.contains('finish')){
-      keepTimes = +keepTimes + 1
-      tasksFinished.push(tasksTodo[index])
-      tasksTodo.splice(index,1)
-      localStorage.setItem('tasksTodo', JSON.stringify(tasksTodo))
-      localStorage.setItem('tasksFinished', JSON.stringify(tasksFinished))
-      localStorage.setItem('keepTimes', keepTimes)
-      genFinished ()
-      genTodo ()
-      activeTab (1)
-      activeContent (1)
+  taskTodo.addEventListener('click', (event) => { // 给 html 里面的 task-todo 列表添加点击监听
+    // 这段程序主要处理，用户点击了「完成」或者「删除」按钮
+    const target = event.target // 获取点击的元素
+    const index = target.getAttribute("data-index") // 获取点击元素的 data-index 属性
+    if(target.classList.contains('finish')){ // 如果点击的是「完成」按钮
+      keepTimes = +keepTimes + 1 // 完成次数加 1
+      tasksFinished.push(tasksTodo[index]) // 将完成的任务添加到 tasksFinished 数组中
+      tasksTodo.splice(index,1) // 删除 tasksTodo 数组中的第 index 个元素
+      localStorage.setItem('tasksTodo', JSON.stringify(tasksTodo)) // 将 tasksTodo 数组转换成JSON，存储到 localStorage 中
+      localStorage.setItem('tasksFinished', JSON.stringify(tasksFinished)) // 将 tasksFinished 数组转换成JSON，存储到 localStorage 中
+      localStorage.setItem('keepTimes', keepTimes) // 将 keepTimes 存储到 localStorage 中
+      genFinished () // 生成已完成任务列表
+      genTodo () // 生成待办任务列表，使用循环
+      activeTab (1) // 给第二个标签加上 nav-active 类名，绿色背景
+      activeContent (1) // 渲染出内容，就是那个 block
     }
-    else if(target.classList.contains('delete')){
-      tasksTodo.splice(index,1)
-      localStorage.setItem('tasksTodo', JSON.stringify(tasksTodo))
-      activeTab (0)
-      activeContent (0)
-      genTodo ()
+    else if(target.classList.contains('delete')){ //「删除」按钮
+      tasksTodo.splice(index,1) // 删除 tasksTodo 数组中的第 index 个元素
+      localStorage.setItem('tasksTodo', JSON.stringify(tasksTodo)) // 将 tasksTodo 数组转换成JSON，存储到 localStorage 中
+      activeTab (0) // 给第一个标签加上 nav-active 类名，绿色背景
+      activeContent (0) // 渲染出内容，就是那个 block
+      genTodo () // 生成待办任务列表，使用循环
     }
   })
 
-  closeDom.addEventListener('click', () => {
+  closeDom.addEventListener('click', () => { // 设置关闭按钮的功能
+    // closeDom 是 close 类名，在 html 里面有一个 X
     ipcRenderer.send('mainWindow:close')
   })
 

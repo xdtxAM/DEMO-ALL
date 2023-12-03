@@ -104,6 +104,6 @@ function createRemindWindow (task) { // 显示提醒
   }, 50 * 1000)
 }
 
-app.on('activate', () => {
-  if (BrowserWindow.getAllWindows().length === 0) createWindow()
+app.on('activate', () => { // 应用激活时创建主窗口
+  if (BrowserWindow.getAllWindows().length === 0) createWindow() // 如果主窗口不存在，则创建
 })
