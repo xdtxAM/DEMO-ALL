@@ -72,4 +72,4 @@ if len(args) > 1:
     else:
         print("无效的WiFi SSID选择")
 else:
-    print("请提供WiFi SSID选择作为命令行参数")
+    print("请提供WiFi SSID选择作为命令行参数1")
