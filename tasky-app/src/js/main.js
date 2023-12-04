@@ -27,7 +27,7 @@
     loginTime = nowTime
   }else{
     const loginD = new Date(loginTime).getTime()
-    if(date.getDate() !== loginD.getDate() || nowTime - loginTime >= 24 * 3600 * 1000){
+    if(date.getDate() !== loginD.getDate() || nowTime - loginTime >= 24 * 3600 * 1000) {
       tasksFinished  = []
       tasksTodo = []
       localStorage.setItem('tasksFinished', JSON.stringify(tasksFinished))

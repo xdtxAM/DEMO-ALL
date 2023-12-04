@@ -11,10 +11,12 @@ document.addEventListener('DOMContentLoaded', function() { // 页面加载完成
     keepTimes = keepTimes ? keepTimes : 0;
 
     // 将任务列表输出到页面上的 task-todo 元素中
-    let taskTodoElement = document.querySelector('.task-todo');
-    tasksTodo.forEach((item, index) => {
+    let taskTodoElement = document.querySelector('.task-todo'); // 选中页面class 为 'task-todo' 的元素
+    tasksTodo.forEach((item, index) => { // 遍历 tasksTodo 数组
         let taskItem = document.createElement('div');
-        taskItem.textContent = `Task ${index + 1}: ${item.name}`;
+        const taskIndex = index + 1;
+        const taskName = item.name;
+        taskItem.textContent = `Task ${taskIndex}: ${taskName}`;
         taskTodoElement.appendChild(taskItem);
     });
 

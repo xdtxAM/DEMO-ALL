@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+
+<p>点击按钮列出数组的每个元素。</p>
+<button onclick="showNumber()">点我</button>
+<p id="demo"></p>
+
+<script>
+demoP = document.getElementById("demo");
+// 选中这个类的元素，通过 demoP 变量轻松地操作这个元素，比如设置其文本内容或其他属性。
+// demoP 在后续的代码中被用来设置 <p> 元素的 innerHTML 属性，以动态显示数组元素的内容：
+var numbers = [4, 9, 16, 25];
+
+function showNumber() {
+    numbers.forEach((item, index) => {
+        demoP.innerHTML = demoP.innerHTML + index + "：" +  item + "<br>"; 
+    });
+};
+</script>
+
+</body>
+</html>
