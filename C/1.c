@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h> //因为需要用到, 强制退出程序, 所以需要引入此库
+#include <stdbool.h>
+
 
 // 2.1 首先声明函数
 void toAddContacts(void);
@@ -26,7 +28,7 @@ void printChoose() {
 	printf("5. Delete Contacts\n");
 	printf("6. Exit System\n");
 	
-	while (1) {
+	while (true) {
 		scanf("%d", &choose);
 
 		// 1.2 根据不同的选择进入不同的入口
