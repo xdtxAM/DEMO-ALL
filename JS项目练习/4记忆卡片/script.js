@@ -38,7 +38,7 @@ const cardsData = getCardsData();
 // 创建所有卡片
 function createCards() {
   cardsData.forEach((data, index) => createCard(data, index));// data 是数组中的每一个元素{}，index 是每一个元素的索引
-  // cardsData.forEach((data, index) => {createCard(data, index); console.log(data, index)}});
+  // cardsData.forEach((data, index) => {createCard(data, index); console.log(data, index)});
 }
 
 // 创建单个卡片并渲染到 DOM 中
@@ -76,7 +76,7 @@ function createCard(data, index) {
   cardsEl.push(card);
 
   // 将卡片添加到 DOM 中
-  cardsContainer.appendChild(card); // 追加 div 就用 appendChild
+  cardsContainer.appendChild(card); // 把上面创建的 card 元素添加到 html 的 cards-container 中
 
   // 更新当前卡片的索引
   updateCurrentText();
@@ -103,43 +103,48 @@ function setCardsData(cards) {
   window.location.reload();
 }
 
+// 创建卡片，渲染到 DOM 中
 createCards();
 
-// Event listeners
+// 事件监听
 
-// Next button
+// 下一个按钮
 nextBtn.addEventListener('click', () => {
+  // 将当前卡片的类名设置为 card left
   cardsEl[currentActiveCard].className = 'card left';
-
+  // 当前卡片的索引 + 1
   currentActiveCard = currentActiveCard + 1;
 
+  // 如果当前卡片的索引大于卡片的总数 - 1，将当前卡片的索引设置为卡片的总数 - 1
   if (currentActiveCard > cardsEl.length - 1) {
     currentActiveCard = cardsEl.length - 1;
+    // console.log(currentActiveCard);
   }
-
+  // 将当前卡片的类名设置为 card active
   cardsEl[currentActiveCard].className = 'card active';
-
+  // 更新当前卡片的索引
   updateCurrentText();
 });
 
-// Prev button
+// 上一个按钮
 prevBtn.addEventListener('click', () => {
+  // 将当前卡片的类名设置为 card right
   cardsEl[currentActiveCard].className = 'card right';
-
+  // 当前卡片的索引 - 1
   currentActiveCard = currentActiveCard - 1;
-
+  // 如果当前卡片的索引小于 0，将当前卡片的索引设置为 0
   if (currentActiveCard < 0) {
     currentActiveCard = 0;
   }
-
+  // 将当前卡片的类名设置为 card active
   cardsEl[currentActiveCard].className = 'card active';
-
+  // 更新当前卡片的索引
   updateCurrentText();
 });
 
 // 显示
 showBtn.addEventListener('click', () => addContainer.classList.add('show'));
-// Hide add container
+// 隐藏
 hideBtn.addEventListener('click', () => addContainer.classList.remove('show'));
 
 // 添加新卡片

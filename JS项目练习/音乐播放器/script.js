@@ -11,41 +11,48 @@ const cover = document.getElementById('cover');
 const currTime = document.querySelector('#currTime');
 const durTime = document.querySelector('#durTime');
 
-// Song titles
+// 音乐名字
 const songs = ['hey', 'summer', 'ukulele'];
 
-// Keep track of song
+// 歌曲索引
 let songIndex = 2;
 
-// Initially load song details into DOM
-loadSong(songs[songIndex]);
+// 最开始加载的歌曲
+loadSong(songs[songIndex]); // songs 是一个数组，songs[2]就表示 ['hey', 'summer', 'ukulele']; 的第二个
 
-// Update song details
+// 切换歌曲
 function loadSong(song) {
-  title.innerText = song;
-  audio.src = `music/${song}.mp3`;
-  cover.src = `images/${song}.jpg`;
+  title.innerText = song; // 把歌曲名字放到 title 元素里
+  audio.src = `music/${song}.mp3`; // 替换 audio 元素的 src 属性
+  cover.src = `images/${song}.jpg`; // ${} 是变量
 }
 
-// Play song
+// 播放
 function playSong() {
-  musicContainer.classList.add('play');
-  playBtn.querySelector('i.fas').classList.remove('fa-play');
-  playBtn.querySelector('i.fas').classList.add('fa-pause');
+  musicContainer.classList.add('play'); // css 写了 .music-container 这里的 play 就是 .music-container.play
+  // 进一步解释：.music-container.play 表示
+  // 选择同时具有 music-container 和 play 类的元素，以应用相应的 CSS 样式。
 
+  playBtn.querySelector('i.fas').classList.remove('fa-play'); // querySelector 选择器，选择 playBtn 元素里的 带 fas 的所有 i 元素
+  // 移除 fa-play 类 fa-play 是播放按钮的图标 移除「播放」换成「暂停」
+  playBtn.querySelector('i.fas').classList.add('fa-pause'); // 添加 fa-pause 类
+
+  // 播放 audio 元素
   audio.play();
 }
 
-// Pause song
+// 暂停
 function pauseSong() {
+  // 移除 play 类
   musicContainer.classList.remove('play');
-  playBtn.querySelector('i.fas').classList.add('fa-play');
-  playBtn.querySelector('i.fas').classList.remove('fa-pause');
-
+  playBtn.querySelector('i.fas').classList.add('fa-play'); // 添加播放按钮
+  playBtn.querySelector('i.fas').classList.remove('fa-pause'); // 移除暂停按钮
+  
+  // 暂停 audio 元素
   audio.pause();
 }
 
-// Previous song
+// 上一首歌
 function prevSong() {
   songIndex--;
 
@@ -58,7 +65,7 @@ function prevSong() {
   playSong();
 }
 
-// Next song
+// 下一首歌
 function nextSong() {
   songIndex++;
 
@@ -71,14 +78,14 @@ function nextSong() {
   playSong();
 }
 
-// Update progress bar
+// 更新进度条
 function updateProgress(e) {
   const { duration, currentTime } = e.srcElement;
   const progressPercent = (currentTime / duration) * 100;
   progress.style.width = `${progressPercent}%`;
 }
 
-// Set progress bar
+// 设置进度条
 function setProgress(e) {
   const width = this.clientWidth;
   const clickX = e.offsetX;
@@ -87,7 +94,7 @@ function setProgress(e) {
   audio.currentTime = (clickX / width) * duration;
 }
 
-//get duration & currentTime for Time of song
+// 时间
 function DurTime (e) {
 	const {duration,currentTime} = e.srcElement;
 	var sec;
