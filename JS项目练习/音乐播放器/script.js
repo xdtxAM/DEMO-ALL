@@ -54,15 +54,16 @@ function pauseSong() {
 
 // 上一首歌
 function prevSong() {
+  // songIndex = songIndex - 1;
   songIndex--;
 
-  if (songIndex < 0) {
+  if (songIndex < 0) { // 减到 0 播放最后一首歌
     songIndex = songs.length - 1;
   }
 
-  loadSong(songs[songIndex]);
+  loadSong(songs[songIndex]); // 加载歌曲
 
-  playSong();
+  playSong(); // 播放
 }
 
 // 下一首歌
@@ -87,7 +88,7 @@ function updateProgress(e) {
 
 // 设置进度条
 function setProgress(e) {
-  const width = this.clientWidth;
+  const width = this.clientWidth; // 
   const clickX = e.offsetX;
   const duration = audio.duration;
 
@@ -168,18 +169,18 @@ playBtn.addEventListener('click', () => {
   }
 });
 
-// Change song
+// 上下按钮
 prevBtn.addEventListener('click', prevSong);
 nextBtn.addEventListener('click', nextSong);
 
-// Time/song update
+// 进度
 audio.addEventListener('timeupdate', updateProgress);
 
-// Click on progress bar
+// 点击进度条
 progressContainer.addEventListener('click', setProgress);
 
-// Song ends
+// 播放完自动播放下一首
 audio.addEventListener('ended', nextSong);
 
-// Time of song
+// 
 audio.addEventListener('timeupdate',DurTime);

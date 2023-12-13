@@ -56,60 +56,62 @@ const data = [
   }
 ];
 
-data.forEach(createBox);
+data.forEach(createBox); // 把data里的每一项都传给 createBox 函数
 
-// Create speech boxes
+
+// 创建页面的照片和文字
 function createBox(item) {
-  const box = document.createElement('div');
+  const box = document.createElement('div'); // 创建一个div
 
-  const { image, text } = item;
+  const { image, text } = item; // 解构赋值
 
-  box.classList.add('box');
+  box.classList.add('box'); // 给div添加class
 
   box.innerHTML = `
     <img src="${image}" alt="${text}" />
     <p class="info">${text}</p>
-  `;
+  `; // 给div添加内容
 
-  box.addEventListener('click', () => {
-    setTextMessage(text);
-    speakText();
+  box.addEventListener('click', () => { // 点击
+    setTextMessage(text); // 设置文本
+    speakText(); // 朗读
 
-    // Add active effect
+    // 添加active class
     box.classList.add('active');
-    setTimeout(() => box.classList.remove('active'), 800);
+    setTimeout(() => box.classList.remove('active'), 800); // 800ms后移除active class
   });
 
+  // 把div添加到main里
   main.appendChild(box);
 }
 
-// Init speech synth
+// 目的是让语音朗读
 const message = new SpeechSynthesisUtterance();
 
-// Store voices
+// 
 let voices = [];
 
+// 获取所有的语音类型，并添加到 html 的 select 里
 function getVoices() {
-  voices = speechSynthesis.getVoices();
+  voices = speechSynthesis.getVoices(); // 获取语音类型。婷婷的语音，小明的语音
+  voices.forEach(voice => { // 遍历所有的
+    const option = document.createElement('option'); // 创建一个 html 元素，
 
-  voices.forEach(voice => {
-    const option = document.createElement('option');
+    option.value = voice.name; // 设置 option 的值
+    option.innerText = `${voice.name} ${voice.lang}`; //  设置 option 的文本 <option value="">1</option>
 
-    option.value = voice.name;
-    option.innerText = `${voice.name} ${voice.lang}`;
-
-    voicesSelect.appendChild(option);
+    voicesSelect.appendChild(option); // 添加到 html 的 select 里
   });
 }
 
-// Set text
+// 设置文本
 function setTextMessage(text) {
-  message.text = text;
+  message.text = text; // 传入的 text 为message的text
 }
 
-// Speak text
+// 朗读
 function speakText() {
-  speechSynthesis.speak(message);
+  speechSynthesis.speak(message); // 读出来
 }
 
 // Set voice
@@ -117,23 +119,23 @@ function setVoice(e) {
   message.voice = voices.find(voice => voice.name === e.target.value);
 }
 
-// Voices changed
+// 更换语音
 speechSynthesis.addEventListener('voiceschanged', getVoices);
 
-// Toggle text box
+// 添加
 toggleBtn.addEventListener('click', () =>
   document.getElementById('text-box').classList.toggle('show')
 );
 
-// Close button
+// 关闭
 closeBtn.addEventListener('click', () =>
   document.getElementById('text-box').classList.remove('show')
 );
 
-// Change voice
+// 改变
 voicesSelect.addEventListener('change', setVoice);
 
-// Read text button
+// 朗读
 readBtn.addEventListener('click', () => {
   setTextMessage(textarea.value);
   speakText();
