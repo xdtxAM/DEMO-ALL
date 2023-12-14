@@ -18,12 +18,15 @@ app.on('ready', () => { // 应用启动后创建主窗口
     icon: iconPath,
     webPreferences:{
       backgroundThrottling: false,
-      nodeIntegration:true,
+      nodeIntegration: true,
       contextIsolation: false
     }
   })
 
   mainWindow.loadURL(`file://${__dirname}/src/main.html`) // 加载主窗口页面
+  // mainWindow.webContents.openDevTools() // 打开开发者工具
+  mainWindow.webContents.openDevTools({mode:'detach'})
+
   mainWindow.removeMenu() // 移除菜单栏
 
   tray = new Tray(iconPath) // 创建托盘
@@ -83,7 +86,7 @@ function createRemindWindow (task) { // 显示提醒
   })
 
   remindWindow.removeMenu() // 移除菜单栏
-  const size = screen.getPrimaryDisplay().workAreaSize
+  const size = screen.getPrimaryDisplay().workAreaSize // 获取屏幕尺寸
   const { y } = tray.getBounds()
   const { height, width } = remindWindow.getBounds()
   const yPosition = process.platform === 'darwin' ? y : y - height
